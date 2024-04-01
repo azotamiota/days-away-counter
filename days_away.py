@@ -36,8 +36,8 @@ def calculate_days_in_ranges(date_ranges, target_date):
 # Main loop
 data = []
 while True:
-    mode = input("Enter 'input' to provide a date range and destination, or 'result' to view the summary: ").lower()
-    if mode == "input":
+    mode = input("Enter 'i' to provide a date range and destination, 'r' to view the summary, or 'q' to exit program: ").lower()
+    if mode == "i":
         date_range_str = input("Enter a date range in the format YYYY/MM/DD-YYYY/MM/DD: ")
         date_range = validate_date_range(date_range_str)
         if date_range is None:
@@ -46,13 +46,13 @@ while True:
         destination = input("Enter a destination: ")
         data.append({"date_range": date_range_str, "destination": destination})
         print("Data saved successfully.")
-        with open("data.csv", "w", newline="") as csvfile:
+        with open("data.csv", "a", newline="") as csvfile:
             fieldnames = ["date_range", "destination"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for row in data:
                 writer.writerow(row)
-    elif mode == "result":
+    elif mode == "r":
         date_ranges = []
         destinations = []
         with open("data.csv", "r") as csvfile:
@@ -70,5 +70,8 @@ while True:
             days = calculate_days_in_ranges([date_range], today)
             print(f"{'-'.join([d.strftime('%Y/%m/%d') for d in date_range])}\t{destination}\t{days}")
         print(f"Total days: {total_days}")
+    elif mode == "q":
+        print("Exiting...")
+        break
     else:
         print("Invalid mode. Please try again.")
